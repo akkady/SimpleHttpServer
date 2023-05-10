@@ -3,6 +3,7 @@ package me.akkad.core;
 import me.akkad.exception.HttpParseException;
 import me.akkad.http.HttpParser;
 import me.akkad.http.HttpRequest;
+import me.akkad.middleware.Middleware;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,6 +13,7 @@ import java.net.Socket;
 
 public class Handler extends Thread {
     private final Logger log = LoggerFactory.getLogger(Handler.class);
+    private final Middleware middleware = new Middleware();
     private final Socket socket;
 
     public Handler(Socket socket) {
@@ -23,6 +25,7 @@ public class Handler extends Thread {
         log.info("Handling request from {}",socket.getInetAddress());
         try {
             HttpRequest request = HttpParser.parseHttpRequest(socket.getInputStream());
+            middleware.findCorespendingRoute(request).getHandler().handel(request);
             OutputStream outputStream = socket.getOutputStream();
 
             String html = "<html><head><title>http server</title></head><body><h1>Server Response :D</h1></body></html>";
