@@ -11,8 +11,8 @@ import java.io.IOException;
 public class Main {
     private static final Logger log = LoggerFactory.getLogger((Main.class));
     //TODO : 1 -> Read configuration file /*done*/
-    //       2 -> Open socket and listen to a port
-    //       3 -> Handel multi thread for multiple requests
+    //       2 -> Open socket and listen to a port /*done*/
+    //       3 -> Handel multi thread for multiple requests /*done*/
     //       4 -> Open and read files from the filesystem
     //       5 -> Write the proper responses
     public static void main(String[] args) {
