@@ -16,7 +16,7 @@ import java.util.Map;
 public class HttpParser {
     private final static Logger log = LoggerFactory.getLogger(HttpParser.class);
 
-    public HttpRequest parseHttpRequest(InputStream inputStream) throws HttpParseException, IOException {
+    public static HttpRequest parseHttpRequest(InputStream inputStream) throws HttpParseException, IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream,StandardCharsets.UTF_8));
         HttpRequest request = new HttpRequest();
 
@@ -27,7 +27,7 @@ public class HttpParser {
         return request;
     }
 
-    private void parseRequestLine(BufferedReader reader, HttpRequest request) throws IOException, HttpParseException {
+    private static void parseRequestLine(BufferedReader reader, HttpRequest request) throws IOException, HttpParseException {
         log.info("Parsing status line");
 
         String requestLine = reader.readLine();
@@ -42,7 +42,7 @@ public class HttpParser {
         request.setHttpVersion(requestLineElements[2]);
     }
 
-    private void parseRequestHeader(BufferedReader reader, HttpRequest request) throws IOException {
+    private static void parseRequestHeader(BufferedReader reader, HttpRequest request) throws IOException {
         log.info("Parsing Headers block");
 
         Map<String, String> headers = new HashMap<>();
@@ -55,7 +55,7 @@ public class HttpParser {
         request.setHeaders(headers);
     }
 
-    private void parseRequestBody(BufferedReader reader, HttpRequest request) throws IOException {
+    private static void parseRequestBody(BufferedReader reader, HttpRequest request) throws IOException {
         if (request.getMethod() != HttpMethod.POST && request.getMethod() != HttpMethod.PUT) {
             return;
         }
