@@ -16,9 +16,9 @@ public class Route {
         this.handler = handler;
     }
 
-    public boolean isMatching(String requestTarget) {
+    public boolean isMatching(String requestTarget,HttpMethod requestMethod) {
         Matcher matcher = requestTargetPattern.matcher(requestTarget);
-        return matcher.find();
+        return matcher.find() && method == requestMethod ;
     }
 
     public Pattern getRequestTargetPattern() {
