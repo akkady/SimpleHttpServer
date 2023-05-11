@@ -6,31 +6,19 @@ import me.akkad.exception.HttpVersionException;
 import java.util.Map;
 
 public abstract class HttpMessage {
-    private HttpMethod method;
-    private String originalHttpVersion;
-    private HttpVersion httpVersion;
-    private Map<String, String> headers;
-    private String body = "";
 
-    public HttpMethod getMethod() {
-        return method;
-    }
+    protected HttpVersion httpVersion;
+    protected Map<String, String> headers;
+    protected String body = "";
 
-    public void setMethod(String method) throws HttpParseException {
-        try {
-            this.method = HttpMethod.valueOf(method);
-        } catch (Exception e) {
-            throw new HttpParseException(HttpStatusCode.NOT_IMPLEMENTED);
-        }
 
-    }
 
     public HttpVersion getHttpVersion() {
         return httpVersion;
     }
 
-    public void setMethod(HttpMethod method) {
-        this.method = method;
+    public void setHttpVersion(HttpVersion httpVersion) {
+        this.httpVersion = httpVersion;
     }
 
     public Map<String, String> getHeaders() {
@@ -49,17 +37,7 @@ public abstract class HttpMessage {
         this.body = body;
     }
 
-    public String getOriginalHttpVersion() {
-        return originalHttpVersion;
-    }
 
-    public void setHttpVersion(String originalHttpVersion) throws HttpParseException {
-        this.originalHttpVersion = originalHttpVersion;
-        try {
-            this.httpVersion = HttpVersion.getBestCompatibleVersion(originalHttpVersion);
-        } catch (HttpVersionException e) {
-            throw new HttpParseException(HttpStatusCode.HTTP_VERSION_NOT_SUPPORTED);
-        }
 
-    }
+
 }

@@ -1,9 +1,12 @@
 package me.akkad.http;
 
 public enum HttpStatusCode {
+    /* SUCCESS CODES */
+    OK(200, "OK"),
+    CREATED(201, "Created"),
     /* CLIENT ERRORS */
     BAD_REQUEST(400, "Bad request"),
-    NOT_FOUND(404, "Resource not found"),
+    NOT_FOUND(404, "Not found"),
     METHOD_NOT_ALLOWED(401, "Methode not allowed"),
     BAD_REQUEST_URI(414, "Bad request, uri too long"),
     /* SERVER ERRORS */
