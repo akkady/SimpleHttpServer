@@ -1,6 +1,12 @@
-package me.akkad.http;
+package me.akkad.http.parser;
 
 import me.akkad.exception.HttpParseException;
+import me.akkad.http.HttpMethod;
+import me.akkad.http.HttpRequest;
+import me.akkad.http.HttpStatusCode;
+import me.akkad.http.HttpVersion;
+import me.akkad.http.parser.RequestParser;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -12,15 +18,8 @@ import java.nio.charset.StandardCharsets;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class HttpParserTest {
 
-    private HttpParser underTest;
-
-    @BeforeAll
-    void beforeAll() {
-        underTest = new HttpParser();
-    }
+class RequestParserTest {
 
     @Test
     void parseHttpRequestLine() throws IOException {
@@ -33,15 +32,15 @@ class HttpParserTest {
         HttpRequest request = null;
         // ACT
         try {
-            request = underTest.parseHttpRequest(inputStream);
+            request = RequestParser.parseHttpRequest(inputStream);
         } catch (HttpParseException e) {
             fail(e);
         }
 
         // Verify
-        assertEquals(HttpMethod.GET, request.getMethod());
+        Assertions.assertEquals(HttpMethod.GET, request.getMethod());
         assertEquals("/", request.getRequestTarget());
-        assertEquals(HttpVersion.HTTP_1_1, request.getHttpVersion());
+        Assertions.assertEquals(HttpVersion.HTTP_1_1, request.getHttpVersion());
     }
 
     @Test
@@ -50,7 +49,7 @@ class HttpParserTest {
         String rowData = "GEEYYY / HTTP/1.1\r\n";
         InputStream inputStream = generateGivenStreamToTest(rowData);
         // Verify
-        assertThrows(HttpParseException.class, () -> underTest.parseHttpRequest(inputStream));
+        assertThrows(HttpParseException.class, () -> RequestParser.parseHttpRequest(inputStream));
     }
 
     @Test
@@ -60,10 +59,10 @@ class HttpParserTest {
         InputStream inputStream = generateGivenStreamToTest(rowData);
         // Verify
         try {
-            underTest.parseHttpRequest(inputStream);
+            RequestParser.parseHttpRequest(inputStream);
             fail();
         } catch (HttpParseException e) {
-            assertEquals(e.getErrorStatusCode(), HttpStatusCode.BAD_REQUEST);
+            Assertions.assertEquals(e.getErrorStatusCode(), HttpStatusCode.BAD_REQUEST);
         }
     }
 
@@ -74,7 +73,7 @@ class HttpParserTest {
         InputStream inputStream = generateGivenStreamToTest(rowData);
         // Verify
         try {
-            underTest.parseHttpRequest(inputStream);
+            RequestParser.parseHttpRequest(inputStream);
             fail();
         } catch (HttpParseException e) {
             assertEquals(e.getErrorStatusCode(), HttpStatusCode.BAD_REQUEST);
@@ -88,7 +87,7 @@ class HttpParserTest {
         InputStream inputStream = generateGivenStreamToTest(rowData);
         // Verify
         try {
-            underTest.parseHttpRequest(inputStream);
+            RequestParser.parseHttpRequest(inputStream);
             fail();
         } catch (HttpParseException e) {
             assertEquals(e.getErrorStatusCode(), HttpStatusCode.BAD_REQUEST);
@@ -102,7 +101,7 @@ class HttpParserTest {
         InputStream inputStream = generateGivenStreamToTest(rowData);
         // ACT
         try {
-            underTest.parseHttpRequest(inputStream);
+            RequestParser.parseHttpRequest(inputStream);
             fail();
         } catch (HttpParseException e) {
             // Verify
@@ -117,7 +116,7 @@ class HttpParserTest {
         InputStream inputStream = generateGivenStreamToTest(rowData);
         // ACT
         try {
-            underTest.parseHttpRequest(inputStream);
+            RequestParser.parseHttpRequest(inputStream);
         } catch (HttpParseException e) {
             fail(e);
         }
@@ -134,7 +133,7 @@ class HttpParserTest {
         HttpRequest request = null;
         // ACT
         try {
-            request = underTest.parseHttpRequest(inputStream);
+            request = RequestParser.parseHttpRequest(inputStream);
         } catch (HttpParseException e) {
             fail(e);
         }
@@ -153,7 +152,7 @@ class HttpParserTest {
         HttpRequest request = null;
         // ACT
         try {
-            request = underTest.parseHttpRequest(inputStream);
+            request = RequestParser.parseHttpRequest(inputStream);
         } catch (HttpParseException e) {
             fail(e);
         }
@@ -175,7 +174,7 @@ class HttpParserTest {
         InputStream inputStream = generateGivenStreamToTest(rowData);
         // ACT
         try {
-            String result = underTest.parseHttpRequest(inputStream).getBody();
+            String result = RequestParser.parseHttpRequest(inputStream).getBody();
             String expected = "{\"firstname\":\"younes\",\"lastname\":\"akkad\"}";
             assertEquals(expected,result);
         } catch (HttpParseException e) {
@@ -194,7 +193,7 @@ class HttpParserTest {
         InputStream inputStream = generateGivenStreamToTest(rowData);
         // ACT
         try {
-            String result = underTest.parseHttpRequest(inputStream).getBody();
+            String result = RequestParser.parseHttpRequest(inputStream).getBody();
             assertEquals(result,"");
         } catch (HttpParseException e) {
             fail(e);

@@ -1,39 +1,26 @@
-package me.akkad.http;
+package me.akkad.http.parser;
 
 import me.akkad.exception.HttpParseException;
+import me.akkad.http.HttpMethod;
+import me.akkad.http.HttpRequest;
+import me.akkad.http.HttpStatusCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
-public class HttpParser {
-    private final static Logger log = LoggerFactory.getLogger(HttpParser.class);
+public class RequestParser {
+    private static final Logger log = LoggerFactory.getLogger(RequestParser.class);
 
-    public static void parseHttpResponse(HttpResponse response, OutputStream outputStream) throws IOException {
-        final String CRLF = "\r\n";
-        final String SP = " ";
-        final String H_DELIMITER = " :";
-        StringBuilder responseWriter = new StringBuilder();
-        // Status line
-        responseWriter.append(
-                response.getHttpVersion() + SP + response.getStatusCode()+ SP + response.getStatusLiteral() + CRLF
-        );
-        // Headers
-        for (Map.Entry header : response.getHeaders().entrySet()) {
-            responseWriter.append(header.getKey() + H_DELIMITER + header.getValue() + CRLF);
-        }
-        // END HEADERS BLOCK
-        responseWriter.append(CRLF);
-        // BODY
-        responseWriter.append(response.getBody());
-
-        log.info(responseWriter.toString());
-        outputStream.write(responseWriter.toString().getBytes());
+    private RequestParser() {
+        throw new IllegalStateException("Utility class should not be initialized");
     }
-
     public static HttpRequest parseHttpRequest(InputStream inputStream) throws HttpParseException, IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
         HttpRequest request = new HttpRequest();
@@ -74,10 +61,11 @@ public class HttpParser {
     }
 
     private static void parseRequestBody(BufferedReader reader, HttpRequest request) throws IOException {
+        log.info("Parsing Body block");
         if (request.getMethod() != HttpMethod.POST && request.getMethod() != HttpMethod.PUT) {
             return;
         }
-        StringBuffer requestBody = new StringBuffer();
+        StringBuilder requestBody = new StringBuilder();
         String bodyLineReader;
         while ((bodyLineReader = reader.readLine()) != null && !bodyLineReader.isBlank()) {
             requestBody.append(bodyLineReader);

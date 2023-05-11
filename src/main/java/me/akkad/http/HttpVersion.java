@@ -9,15 +9,15 @@ public enum HttpVersion {
     HTTP_1_0("HTTP/1.0", 1, 0),
     HTTP_1_1("HTTP/1.1", 1, 1),
     HTTP_2("HTTP/2", 2, 0);
-    private final String LITERAL;
-    private final int MAJOR;
+    public final String literal;
+    public final int major;
 
-    private final int MINOR;
+    private final int minor;
 
-    HttpVersion(String LITERAL, int MAJOR, int MINOR) {
-        this.LITERAL = LITERAL;
-        this.MAJOR = MAJOR;
-        this.MINOR = MINOR;
+    HttpVersion(String literal, int major, int minor) {
+        this.literal = literal;
+        this.major = major;
+        this.minor = minor;
     }
 
     private static final Pattern httpVersionRegex = Pattern.compile("^HTTP/(?<major>\\d)(.(?<minor>\\d))?");
@@ -33,10 +33,10 @@ public enum HttpVersion {
 
         HttpVersion bestCompatible = null;
         for (HttpVersion version : HttpVersion.values()) {
-            if (version.LITERAL.equals(literalVersion)) {
+            if (version.literal.equals(literalVersion)) {
                 return version;
             } else {
-                if (version.MAJOR == major && version.MINOR <= minor) {
+                if (version.major == major && version.minor <= minor) {
                     bestCompatible = version;
                 }
             }

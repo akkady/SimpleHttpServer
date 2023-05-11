@@ -28,4 +28,8 @@ public class HttpResponse extends HttpMessage {
     public void setErrorMessage(String errorMessage) {
         this.errorMessage = errorMessage;
     }
+
+    public String getHttpVersionLiteral() {
+        return getHttpVersion().literal;
+    }
 }
