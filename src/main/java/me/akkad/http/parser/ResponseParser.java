@@ -22,15 +22,17 @@ public class ResponseParser {
         responseWriter.append(response.getHttpVersionLiteral()).append(SP)
                 .append(response.getStatusCode()).append(SP)
                 .append(response.getStatusLiteral()).append(CRLF);
+
         // headers
         for (Map.Entry<String,String> header : response.getHeaders().entrySet()) {
             responseWriter.append(header.getKey()).append(H_DELIMITER).append(header.getValue()).append(CRLF);
         }
-        // end header block
         responseWriter.append(CRLF);
-        // body
-        responseWriter.append(response.getBody()).append(CRLF);
 
+        // body
+        if (!response.getBody().isBlank()) {
+            responseWriter.append(response.getBody()).append(CRLF).append(CRLF);
+        }
 
         outputStream.write(responseWriter.toString().getBytes());
     }

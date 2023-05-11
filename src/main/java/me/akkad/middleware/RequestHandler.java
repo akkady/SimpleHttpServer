@@ -1,8 +1,9 @@
 package me.akkad.middleware;
 
 import me.akkad.http.HttpRequest;
+import me.akkad.http.ResponseEntity;
 
 @FunctionalInterface
 public interface RequestHandler {
-    void handel(HttpRequest request);
+    ResponseEntity<?> handel(HttpRequest request);
 }
