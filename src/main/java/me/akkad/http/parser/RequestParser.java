@@ -1,7 +1,9 @@
-package me.akkad.http;
+package me.akkad.http.parser;
 
 import me.akkad.exception.HttpParseException;
-import me.akkad.exception.HttpVersionException;
+import me.akkad.http.HttpMethod;
+import me.akkad.http.HttpRequest;
+import me.akkad.http.HttpStatusCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,11 +15,14 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
-public class HttpParser {
-    private final static Logger log = LoggerFactory.getLogger(HttpParser.class);
+public class RequestParser {
+    private static final Logger log = LoggerFactory.getLogger(RequestParser.class);
 
+    private RequestParser() {
+        throw new IllegalStateException("Utility class should not be initialized");
+    }
     public static HttpRequest parseHttpRequest(InputStream inputStream) throws HttpParseException, IOException {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream,StandardCharsets.UTF_8));
+        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
         HttpRequest request = new HttpRequest();
 
         parseRequestLine(reader, request);
@@ -56,12 +61,13 @@ public class HttpParser {
     }
 
     private static void parseRequestBody(BufferedReader reader, HttpRequest request) throws IOException {
+        log.info("Parsing Body block");
         if (request.getMethod() != HttpMethod.POST && request.getMethod() != HttpMethod.PUT) {
             return;
         }
-        StringBuffer requestBody = new StringBuffer();
+        StringBuilder requestBody = new StringBuilder();
         String bodyLineReader;
-        while ((bodyLineReader=reader.readLine()) != null && !bodyLineReader.isBlank()) {
+        while ((bodyLineReader = reader.readLine()) != null && !bodyLineReader.isBlank()) {
             requestBody.append(bodyLineReader);
         }
         request.setBody(requestBody.toString());
