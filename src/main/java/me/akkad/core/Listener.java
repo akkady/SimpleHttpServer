@@ -23,7 +23,7 @@ public class Listener extends Thread {
         try {
             while (serverSocket.isBound() && !serverSocket.isClosed()) {
                 Socket socket = serverSocket.accept();
-                new Handler(socket).start();
+                new WorkerThread(socket).start();
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
