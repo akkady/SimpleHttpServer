@@ -12,17 +12,13 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class UserController implements RequestHandler {
+public class UserController{
     private static final Logger log = LoggerFactory.getLogger(UserController.class);
     private static final Map<String, String> users = new HashMap<>(
             Map.of("1", "Marli", "2", "Eren", "3", "Gogo")
     );
     private static final Pattern userIdRegex = Pattern.compile("/users/(?<userId>\\d+)");
 
-    @Override
-    public void handel(HttpRequest request) {
-        log.info("Handel method :D");
-    }
 
     public static List<String> getUsers(HttpRequest request) {
         log.info("Request to get all users");

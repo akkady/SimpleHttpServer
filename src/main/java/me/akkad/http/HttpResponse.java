@@ -1,7 +1,5 @@
 package me.akkad.http;
 
-import java.util.Map;
-
 public class HttpResponse extends HttpMessage {
     private int statusCode; // 200, 201, 400, 500 ...
     private String statusLiteral; // OK, Created, Not found ...

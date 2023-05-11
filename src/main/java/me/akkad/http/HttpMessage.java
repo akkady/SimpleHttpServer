@@ -7,9 +7,9 @@ import java.util.Map;
 
 public abstract class HttpMessage {
 
-    protected HttpVersion httpVersion;
-    protected Map<String, String> headers;
-    protected String body = "";
+    private HttpVersion httpVersion;
+    private Map<String, String> headers;
+    private String body = "";
 
 
 

@@ -25,7 +25,7 @@ public class HttpRequest extends HttpMessage {
     public void setHttpVersion(String originalHttpVersion) throws HttpParseException {
         this.originalHttpVersion = originalHttpVersion;
         try {
-            this.httpVersion = HttpVersion.getBestCompatibleVersion(originalHttpVersion);
+            setHttpVersion(HttpVersion.getBestCompatibleVersion(originalHttpVersion));
         } catch (HttpVersionException e) {
             throw new HttpParseException(HttpStatusCode.HTTP_VERSION_NOT_SUPPORTED);
         }

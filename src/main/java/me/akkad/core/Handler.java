@@ -1,8 +1,7 @@
 package me.akkad.core;
 
 import me.akkad.exception.HttpParseException;
-import me.akkad.http.HttpParser;
-import me.akkad.http.HttpRequest;
+import me.akkad.http.*;
 import me.akkad.middleware.Middleware;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,6 +9,8 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Handler extends Thread {
     private final Logger log = LoggerFactory.getLogger(Handler.class);
@@ -26,14 +27,18 @@ public class Handler extends Thread {
         try {
             HttpRequest request = HttpParser.parseHttpRequest(socket.getInputStream());
             middleware.findCorespendingRoute(request).getHandler().handel(request);
-            OutputStream outputStream = socket.getOutputStream();
-
-            String html = "<html><head><title>http server</title></head><body><h1>Server Response :D</h1></body></html>";
-            final String CRLF = "\n\r";
-            String response = "HTTP/1.1 200 OK" + CRLF +
-                    "Content-Length: " + html.getBytes().length + CRLF +
-                    CRLF + html;
-            outputStream.write(response.getBytes());
+            HttpResponse response = new HttpResponse();
+            String html = "<html><head><title>http server</title>"+
+                    "</head><body><h1>Server Response :D</h1></body></html>";
+            Map<String, String> headers = new HashMap<>();
+            headers.put("Content-Type", "text/html; charset=utf-8");
+            headers.put("Content-Length", String.valueOf(html.getBytes().length));
+            response.setHttpVersion(HttpVersion.HTTP_1_1);
+            response.setStatusCode(HttpStatusCode.OK.code);
+            response.setStatusLiteral(HttpStatusCode.OK.message);
+            response.setHeaders(headers);
+            response.setBody(html);
+            HttpParser.parseHttpResponse(response,socket.getOutputStream());
             socket.close();
         } catch (IOException | HttpParseException e) {
             throw new RuntimeException(e);
