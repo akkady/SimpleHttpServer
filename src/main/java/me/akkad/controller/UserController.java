@@ -27,7 +27,7 @@ public class UserController {
     public static ResponseEntity<User> getUserById(HttpRequest request) {
         Matcher matcher = userIdRegex.matcher(request.getRequestTarget());
         User user = null;
-        if (!matcher.find()) {
+        if (matcher.find()) {
             int userId = Integer.parseInt(matcher.group("userId"));
             user= users.stream().filter(u -> u.getId() == userId).findAny().orElse(new User());
         }
@@ -37,8 +37,8 @@ public class UserController {
     private static List<User> getInitialUsers() {
         return List.of(
                 new User(1, "Eren", 18),
-                new User(1, "Marli", 18),
-                new User(1, "Bejita", 18)
+                new User(2, "Marli", 18),
+                new User(3, "Bejita", 18)
         );
     }
 }
