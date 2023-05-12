@@ -31,7 +31,7 @@ public class ResponseParser {
 
         // body
         if (!response.getBody().isBlank()) {
-            responseWriter.append(response.getBody()).append(CRLF).append(CRLF);
+            responseWriter.append(response.getBody()).append(CRLF);
         }
 
         outputStream.write(responseWriter.toString().getBytes());
